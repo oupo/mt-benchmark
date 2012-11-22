@@ -1,6 +1,6 @@
-var mtBenchmark4;
+var mtBenchmark5;
 (function() {
-mtBenchmark4 = main;
+mtBenchmark5 = main;
 
 function main(N) {
 	var start = Date.now();
@@ -42,21 +42,18 @@ function get_first_mt_result(seed) {
 	var mt0 = u16pair(seed);
 	var mt = mt0.slice();
 	for (var i = 1; i <= 397; i++) {
-		var M = 1812433253;
 		mt[0] ^= (mt[1] >>> 14);
 
 		// mul
-		var b0 = M & 0xffff, b1 = M >>> 16;
-		var low = mt[0] * b0;
-		var high = mt[1] * b0 + mt[0] * b1;
+		var low = mt[0] * (1812433253 & 0xffff);
+		var high = mt[1] * (1812433253 & 0xffff) + mt[0] * (1812433253 >>> 16);
 		var carryup = low >>> 16;
 		mt[0] = low & 0xffff;
 		mt[1] = (high + carryup) & 0xffff;
 
 		// add
-		var b0 = i, b1 = 0;
-		var low = mt[0] + b0;
-		var high = mt[1] + b1;
+		var low = mt[0] + i;
+		var high = mt[1];
 		var carryup = (low >= 0x10000) ? 1 : 0;
 		mt[0] = low & 0xffff;
 		mt[1] = (high + carryup) & 0xffff;
