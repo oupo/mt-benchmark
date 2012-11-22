@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>mt-benchmark.html</title>
+<script src="mt-benchmark1.js"></script>
+<script src="mt-benchmark2.js"></script>
+<script src="mt-benchmark3.js"></script>
+<script>
+function main() {
+	var fns = [mtBenchmark1, mtBenchmark2, mtBenchmark3];
+	var N = 40000;
+	var outs = fns.map(function(fn){return fn(N)});
+
+	document.body.innerHTML = outs.map(function(x){return x.match(/^.+sec/)[0]}).join("|");
+}
+</script>
+</head>
+<body onload="main()">
+</body>
+</html>
