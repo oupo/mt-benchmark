@@ -1,6 +1,6 @@
-var mtBenchmark1;
+var mtBenchmark2;
 (function() {
-mtBenchmark1 = main;
+mtBenchmark2 = main;
 
 function main(N) {
 	var start = Date.now();
@@ -15,17 +15,43 @@ function main(N) {
 
 function u32(x) { return x >>> 0; }
 
-function mul(a, b) {
-	var a1 = a >>> 16, a2 = a & 0xffff;
-	var b1 = b >>> 16, b2 = b & 0xffff;
-	return u32(((a1 * b2 + a2 * b1) << 16) + a2 * b2);
+function u16pair_to_u32(pair) {
+	return u32(pair[0] | pair[1] << 16);
+}
+
+function u16pair(x) {
+	return [x & 0xffff, x >>> 16];
+}
+
+function mul(a, b0, b1) {
+	var low = a[0] * b0;
+	var high = a[1] * b0 + a[0] * b1;
+	var carryup = low >>> 16;
+	a[0] = low & 0xffff;
+	a[1] = (high + carryup) & 0xffff;
+	return a;
+}
+
+function add(a, b0, b1) {
+	var low = a[0] + b0;
+	var high = a[1] + b1;
+	var carryup = (low >= 0x10000) ? 1 : 0;
+	a[0] = low & 0xffff;
+	a[1] = (high + carryup) & 0xffff;
 }
 
 function next_mt_elem(a, i) {
-	return u32(mul(1812433253, (a ^ (a >>> 30))) + i);
+	var M = 1812433253;
+	a[0] ^= (a[1] >>> 14);
+	mul(a, M & 0xffff, M >>> 16);
+	add(a, i, 0);
+	return a;
 }
 
 function genrand(mt0, mt1, mt397) {
+	mt0 = u16pair_to_u32(mt0);
+	mt1 = u16pair_to_u32(mt1);
+	mt397 = u16pair_to_u32(mt397);
 	var v;
 	v = (mt0 & 0x80000000) | (mt1 & 0x7fffffff);
 	v = mt397 ^ (v >>> 1) ^ ((v & 1) ? 0x9908b0df : 0);
@@ -38,11 +64,11 @@ function genrand(mt0, mt1, mt397) {
 
 function get_first_mt_result(seed) {
 	var mt, mt0, mt1, mt397;
-	mt0 = seed;
-	mt1 = next_mt_elem(mt0, 1);
-	mt = mt1;
+	mt0 = u16pair(seed);
+	mt1 = next_mt_elem(mt0.slice(), 1);
+	mt = mt1.slice();
 	for (var i = 2; i <= 397; i++) {
-		mt = next_mt_elem(mt, i);
+		next_mt_elem(mt, i);
 	}
 	mt397 = mt;
 	return genrand(mt0, mt1, mt397);
