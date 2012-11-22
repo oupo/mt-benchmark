@@ -1,6 +1,6 @@
-var mtBenchmark2;
+var mtBenchmark3;
 (function() {
-mtBenchmark2 = main;
+mtBenchmark3 = main;
 
 function main(N) {
 	var start = Date.now();
@@ -43,8 +43,22 @@ function add(a, b0, b1) {
 function next_mt_elem(a, i) {
 	var M = 1812433253;
 	a[0] ^= (a[1] >>> 14);
-	mul(a, M & 0xffff, M >>> 16);
-	add(a, i, 0);
+
+	// mul
+	var b0 = M & 0xffff, b1 = M >>> 16;
+	var low = a[0] * b0;
+	var high = a[1] * b0 + a[0] * b1;
+	var carryup = low >>> 16;
+	a[0] = low & 0xffff;
+	a[1] = (high + carryup) & 0xffff;
+
+	// add
+	var b0 = i, b1 = 0;
+	var low = a[0] + b0;
+	var high = a[1] + b1;
+	var carryup = (low >= 0x10000) ? 1 : 0;
+	a[0] = low & 0xffff;
+	a[1] = (high + carryup) & 0xffff;
 	return a;
 }
 
