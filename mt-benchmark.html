@@ -6,9 +6,11 @@
 <script src="mt-benchmark1.js"></script>
 <script src="mt-benchmark2.js"></script>
 <script src="mt-benchmark3.js"></script>
+<script src="mt-benchmark4.js"></script>
+<script src="mt-benchmark5.js"></script>
 <script>
 function main() {
-	var fns = [mtBenchmark1, mtBenchmark2, mtBenchmark3];
+	var fns = [mtBenchmark1, mtBenchmark2, mtBenchmark3, mtBenchmark4, mtBenchmark5];
 	var N = 40000;
 	var outs = fns.map(function(fn){return fn(N)});
 
