@@ -1,6 +1,6 @@
-var mtBenchmark3;
+var mtBenchmark4;
 (function() {
-mtBenchmark3 = main;
+mtBenchmark4 = main;
 
 function main(N) {
 	var start = Date.now();
@@ -23,45 +23,6 @@ function u16pair(x) {
 	return [x & 0xffff, x >>> 16];
 }
 
-function mul(a, b0, b1) {
-	var low = a[0] * b0;
-	var high = a[1] * b0 + a[0] * b1;
-	var carryup = low >>> 16;
-	a[0] = low & 0xffff;
-	a[1] = (high + carryup) & 0xffff;
-	return a;
-}
-
-function add(a, b0, b1) {
-	var low = a[0] + b0;
-	var high = a[1] + b1;
-	var carryup = (low >= 0x10000) ? 1 : 0;
-	a[0] = low & 0xffff;
-	a[1] = (high + carryup) & 0xffff;
-}
-
-function next_mt_elem(a, i) {
-	var M = 1812433253;
-	a[0] ^= (a[1] >>> 14);
-
-	// mul
-	var b0 = M & 0xffff, b1 = M >>> 16;
-	var low = a[0] * b0;
-	var high = a[1] * b0 + a[0] * b1;
-	var carryup = low >>> 16;
-	a[0] = low & 0xffff;
-	a[1] = (high + carryup) & 0xffff;
-
-	// add
-	var b0 = i, b1 = 0;
-	var low = a[0] + b0;
-	var high = a[1] + b1;
-	var carryup = (low >= 0x10000) ? 1 : 0;
-	a[0] = low & 0xffff;
-	a[1] = (high + carryup) & 0xffff;
-	return a;
-}
-
 function genrand(mt0, mt1, mt397) {
 	mt0 = u16pair_to_u32(mt0);
 	mt1 = u16pair_to_u32(mt1);
@@ -78,11 +39,29 @@ function genrand(mt0, mt1, mt397) {
 
 function get_first_mt_result(seed) {
 	var mt, mt0, mt1, mt397;
-	mt0 = u16pair(seed);
-	mt1 = next_mt_elem(mt0.slice(), 1);
-	mt = mt1.slice();
-	for (var i = 2; i <= 397; i++) {
-		next_mt_elem(mt, i);
+	var mt0 = u16pair(seed);
+	var mt = mt0.slice();
+	for (var i = 1; i <= 397; i++) {
+		var M = 1812433253;
+		mt[0] ^= (mt[1] >>> 14);
+
+		// mul
+		var b0 = M & 0xffff, b1 = M >>> 16;
+		var low = mt[0] * b0;
+		var high = mt[1] * b0 + mt[0] * b1;
+		var carryup = low >>> 16;
+		mt[0] = low & 0xffff;
+		mt[1] = (high + carryup) & 0xffff;
+
+		// add
+		var b0 = i, b1 = 0;
+		var low = mt[0] + b0;
+		var high = mt[1] + b1;
+		var carryup = (low >= 0x10000) ? 1 : 0;
+		mt[0] = low & 0xffff;
+		mt[1] = (high + carryup) & 0xffff;
+
+		if (i === 1) mt1 = mt.slice();
 	}
 	mt397 = mt;
 	return genrand(mt0, mt1, mt397);
