@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <title>mt-benchmark.html</title>
-<script src="mt-benchmark1.js"></script>
-<script src="mt-benchmark2.js"></script>
-<script src="mt-benchmark4.js"></script>
+<script src="mt-benchmark-naive.js"></script>
+<script src="mt-benchmark-16bitpair-1.js"></script>
+<script src="mt-benchmark-16bitpair-3.js"></script>
 <script>
 function main() {
-	var fns = [mtBenchmark1, mtBenchmark2, mtBenchmark4];
+	var fns = [mtBenchmark_Naive, mtBenchmark_16bitPair_1, mtBenchmark_16bitPair_3];
 	var N = 40000;
 	var outs = fns.map(function(fn){return fn(N)});
 

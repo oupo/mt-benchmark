@@ -1,6 +1,6 @@
-var mtBenchmark1;
+var mtBenchmark_Naive;
 (function() {
-mtBenchmark1 = main;
+mtBenchmark_Naive = main;
 
 function main(N) {
 	var start = Date.now();

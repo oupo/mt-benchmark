@@ -1,6 +1,6 @@
-var mtBenchmark4;
+var mtBenchmark_16bitPair_3;
 (function() {
-mtBenchmark4 = main;
+mtBenchmark_16bitPair_3 = main;
 
 function main(N) {
 	var start = Date.now();
