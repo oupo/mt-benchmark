@@ -1,0 +1,6 @@
+mt-benchmark1.js: 通常
+mt-benchmark2.js: 整数演算高速化
+mt-benchmark3.js: 整数演算高速化＋addとmulをインライン展開
+mt-benchmark4.js: 整数演算高速化＋addとmulとnext_mt_elemをインライン展開
+mt-benchmark5.js: 整数演算高速化＋addとmulとnext_mt_elemをインライン展開＋姑息な最適化
+
