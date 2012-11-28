@@ -3,16 +3,20 @@
 <head>
 <meta charset="utf-8">
 <title>mt-benchmark.html</title>
-<script src="mt-benchmark-naive.js"></script>
+<script src="mt-benchmark-naive-1.js"></script>
+<script src="mt-benchmark-naive-2.js"></script>
+<script src="mt-benchmark-tinymul-1.js"></script>
+<script src="mt-benchmark-tinymul-2.js"></script>
 <script src="mt-benchmark-16bitpair-1.js"></script>
 <script src="mt-benchmark-16bitpair-3.js"></script>
 <script>
 function main() {
-	var fns = [mtBenchmark_Naive, mtBenchmark_16bitPair_1, mtBenchmark_16bitPair_3];
+	var fns = ["mtBenchmark_Naive_1", "mtBenchmark_Naive_2", "mtBenchmark_TinyMul_1", "mtBenchmark_TinyMul_2", "mtBenchmark_16bitPair_1", "mtBenchmark_16bitPair_3"];
 	var N = 40000;
-	var outs = fns.map(function(fn){return fn(N)});
+	var outs = fns.map(function(name){return name + ": " + window[name](N)});
 
-	document.body.innerHTML = outs.map(function(x){return x.match(/^.+sec/)[0] + "|"}).join("");
+	//document.body.innerHTML = outs.map(function(x){return x.match(/^.+sec/)[0] + "|"}).join("");
+	document.body.innerHTML = outs.join("<br>");
 }
 </script>
 </head>
