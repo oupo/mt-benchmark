@@ -1,6 +1,6 @@
-var mtBenchmark_Naive_2;
+var mtBenchmark_TinyMul_2;
 (function() {
-mtBenchmark_Naive_2 = main;
+mtBenchmark_TinyMul_2 = main;
 
 function main(N) {
 	var start = Date.now();
@@ -33,8 +33,7 @@ function get_first_mt_result(seed) {
 		var a = 1812433253;
 		var b = mt ^ (mt >>> 30);
 		var a1 = a >>> 16, a2 = a & 0xffff;
-		var b1 = b >>> 16, b2 = b & 0xffff;
-		mt = ((a1 * b2 + a2 * b1) << 16) + a2 * b2 + i;
+		mt = ((b * a1) << 16) + b * a2 + i;
 		if (i == 1) mt1 = u32(mt);
 	}
 	mt397 = u32(mt);
