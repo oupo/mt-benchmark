@@ -1,6 +1,6 @@
-var mtBenchmark_Naive_1;
+var mtBenchmark_TinyMul_1;
 (function() {
-mtBenchmark_Naive_1 = main;
+mtBenchmark_TinyMul_1 = main;
 
 function main(N) {
 	var start = Date.now();
@@ -17,8 +17,7 @@ function u32(x) { return x >>> 0; }
 
 function mul(a, b) {
 	var a1 = a >>> 16, a2 = a & 0xffff;
-	var b1 = b >>> 16, b2 = b & 0xffff;
-	return u32(((a1 * b2 + a2 * b1) << 16) + a2 * b2);
+	return u32(((b * a1) << 16) + b * a2);
 }
 
 function next_mt_elem(a, i) {
