@@ -1,6 +1,6 @@
-var mtBenchmark_Naive_1;
+var mtBenchmark_Naive_2;
 (function() {
-mtBenchmark_Naive_1 = main;
+mtBenchmark_Naive_2 = main;
 
 function main(N) {
 	var start = Date.now();
@@ -15,16 +15,6 @@ function main(N) {
 
 function u32(x) { return x >>> 0; }
 
-function mul(a, b) {
-	var a1 = a >>> 16, a2 = a & 0xffff;
-	var b1 = b >>> 16, b2 = b & 0xffff;
-	return u32(((a1 * b2 + a2 * b1) << 16) + a2 * b2);
-}
-
-function next_mt_elem(a, i) {
-	return u32(mul(1812433253, (a ^ (a >>> 30))) + i);
-}
-
 function genrand(mt0, mt1, mt397) {
 	var v;
 	v = (mt0 & 0x80000000) | (mt1 & 0x7fffffff);
@@ -38,13 +28,16 @@ function genrand(mt0, mt1, mt397) {
 
 function get_first_mt_result(seed) {
 	var mt, mt0, mt1, mt397;
-	mt0 = seed;
-	mt1 = next_mt_elem(mt0, 1);
-	mt = mt1;
-	for (var i = 2; i <= 397; i++) {
-		mt = next_mt_elem(mt, i);
+	mt = mt0 = seed;
+	for (var i = 1; i <= 397; i++) {
+		var a = 1812433253;
+		var b = mt ^ (mt >>> 30);
+		var a1 = a >>> 16, a2 = a & 0xffff;
+		var b1 = b >>> 16, b2 = b & 0xffff;
+		mt = ((a1 * b2 + a2 * b1) << 16) + a2 * b2 + i;
+		if (i == 1) mt1 = u32(mt);
 	}
-	mt397 = mt;
+	mt397 = u32(mt);
 	return genrand(mt0, mt1, mt397);
 }
 })();
