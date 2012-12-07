@@ -1,18 +1,18 @@
 import std.stdio;
-import std.perf;
 import std.stdint;
+import std.datetime;
 alias uint32_t u32;
 
 void main(string[] args) {
 	int N = std.conv.to!int(args[1]);
-	auto timer = new PerformanceCounter;
-	timer.start();
+	StopWatch sw;
+	sw.start();
 	u32 result = 0;
 	for (int i = 0; i < N; i ++) {
 		result += get_first_mt_result(i);
 	}
-	timer.stop();
-	writefln("%.2f sec / result = %d", timer.milliseconds / 1000.0, result);
+	sw.stop();
+	writefln("%.2f sec / result = %d", sw.peek().msecs / 1000.0, result);
 }
 
 u32 next_mt_elem(u32 a, u32 i) {
