@@ -18,7 +18,7 @@ func main() {
 		result += get_first_mt_result(u32(i))
 	}
 	t := float64(time.Now().Sub(start).Nanoseconds()) / 1e9;
-	fmt.Printf("%.2f %d\n", t, result)
+	fmt.Printf("%.2f sec / result = %d\n", t, result)
 }
 
 func next_mt_elem(a u32, i int) u32 {

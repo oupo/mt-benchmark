@@ -1,0 +1,25 @@
+#!/usr/bin/ruby
+
+def sys(cmd)
+  #puts cmd
+  system cmd
+end
+
+n = ENV["N"] || 1000000
+case ARGV[0]
+when "c"
+  glib_opt = `pkg-config --cflags --libs glib-2.0`.chomp
+  sys "gcc mt-benchmark.c -o mt-benchmark-c -g -std=c99 -Wall -W -O2 #{glib_opt}"
+  sys "./mt-benchmark-c #{n}"
+when "d"
+  sys "rdmd -O -inline MtBenchmark.d #{n}"
+when "java"
+  sys "javac MtBenchmark.java"
+  sys "java MtBenchmark #{n}"
+when "scala"
+  sys "scala mt-benchmark.scala #{n}"
+when "go"
+  sys "go build -compiler gccgo -gccgoflags '-static-libgcc -O2' -o mt-benchmark-go mt-benchmark.go"
+  sys "./mt-benchmark-go #{n}"
+end
+
